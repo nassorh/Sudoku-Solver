@@ -6,6 +6,7 @@ class BoardTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.Board = Board("board.txt")
         cls.cell = Cell(0,0)
+        cls.NullCell = Cell()
         
     def test_board_converter(self):
         print("Board Converter Test")

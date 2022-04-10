@@ -10,7 +10,10 @@ class Cell():
     def __init__(self,row=None,column=None):
         self.row = row 
         self.column = column
-    
+
+class NullCell(Cell):
+    pass
+
 class Board():
     def __init__(self,board_dir):
         self.board = self.convert_board_to_array(board_dir)
@@ -24,15 +27,11 @@ class Board():
         print(np.matrix(self.board))
 
     def find_next_empty_cell(self) -> Cell:
-        cell = Cell()
-
         for row in range(len(self.board)):
             for column in range(len(self.board[row])):
                 if self.board[row][column] == 0:
-                    cell.row = row
-                    cell.column = column
-                    return cell
-        return cell
+                    return Cell(row,column)
+        return NullCell()
 
     def fetch_all_neigbour_nums(self,cell) -> dict:
         numbersFound= {}
@@ -99,6 +98,3 @@ class Board():
                     nums.append(int(num))
                 board_array.append(nums)
         return board_array
-
-board = Board.convert_board_to_array("board.txt")
-cell = Cell()
