@@ -5,6 +5,7 @@ class BoardTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.Board = Board("board.txt")
+        cls.cell = Cell(0,0)
         
     def test_board_converter(self):
         print("Board Converter Test")
@@ -24,31 +25,31 @@ class BoardTest(unittest.TestCase):
 
     def test_find_horizonal_nums_test(self):
         print("Get vertical horizonal test")
-        nums_found = self.Board.get_horizontal_nums(0)
+        nums_found = self.Board.get_horizontal_nums(self.cell)
         self.assertEqual(nums_found,{5: True, 3: True, 7: True})
 
     def test_find_vertical_nums_test(self):
         print("Get vertical numbers test")
-        nums_found = self.Board.get_vertical_nums(0)
+        nums_found = self.Board.get_vertical_nums(self.cell)
         self.assertEqual(nums_found,{5: True, 6: True, 8: True, 4: True, 7: True})
     
     def test_get_nums_in_block(self):
         print("Get numbers in block test")
-        nums_found = self.Board.get_nums_in_block(2,2)
+        nums_found = self.Board.get_nums_in_block(self.cell)
         self.assertEqual(nums_found,{5: True, 3: True, 6: True, 9: True, 8: True})
 
     def test_fetch_all_neigbour_nums(self):
         print("Fetch all neigbour nums")
-        nums_found = self.Board.fetch_all_neigbour_nums(0,0)
+        nums_found = self.Board.fetch_all_neigbour_nums(self.cell)
         self.assertEqual(nums_found,{5: True, 3: True, 7: True, 6: True, 8: True, 4: True, 9: True})
 
     def test_ifValid_valid_num(self):
         print("If Valid Test False")
-        self.assertEqual(False,self.Board.ifValid(0,0,5))
+        self.assertEqual(False,self.Board.ifValid(self.cell,5))
 
     def test_ifValid_invaild_num(self):
         print("If Valid Test True")
-        self.assertEqual(True,self.Board.ifValid(0,0,1))
+        self.assertEqual(True,self.Board.ifValid(self.cell,1))
 
     def test_updateVal(self):
         print("Update val test")
@@ -63,13 +64,13 @@ class BoardTest(unittest.TestCase):
                 [0,0,0,4,1,9,0,0,5],
                 [0,0,0,0,8,0,0,7,9]
         ]
-        self.Board.updateVal(0,0,1)
+        self.Board.updateVal(self.cell,1)
         self.assertEqual(board,self.Board.board)
     
     def test_find_empty_cell(self):
         print("Find Next Empty Cell")
-        row,col = self.Board.find_next_empty_cell()
-        self.assertEqual((row,col),(0,2))
+        empty_cell = self.Board.find_next_empty_cell()
+        self.assertEqual((empty_cell.row,empty_cell.column),(0,2))
 
 if __name__ == "__main__":
     unittest.main()
