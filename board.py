@@ -1,10 +1,5 @@
-from ipaddress import collapse_addresses
-from tkinter import HORIZONTAL
-from xmlrpc.client import boolean
-from mysqlx import Row
 import numpy as np
 from pandas import array
-import re 
 
 class Cell():
     def __init__(self,row=None,column=None):
@@ -75,14 +70,17 @@ class Board():
                     
         return numbersFound_boolean
 
-    def ifValid(self,cell,num) -> boolean:
+    def ifValid(self,cell,num) -> bool:
+        if isinstance(cell,NullCell):
+            return False
+            
         numbersFound = self.fetch_all_neigbour_nums(cell)
         if numbersFound.get(num)==None:
             return True
         else:
             return False
 
-    def updateVal(self,cell,val) -> boolean:
+    def updateVal(self,cell,val) -> bool:
         self.board[cell.row][cell.column] = val
         return True
 
