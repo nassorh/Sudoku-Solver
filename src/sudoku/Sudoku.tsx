@@ -81,4 +81,8 @@ export default class Sudoku {
         }
         return false
     }
+
+    isComplete(){
+        return this._board.isComplete()
+    }
 }
