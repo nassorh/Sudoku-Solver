@@ -16,6 +16,18 @@ const sudokuArray: (number | null)[][] = [
   [null, null, null, null, 8, null, null, 7, 9]
 ];
 
+const solutionArray : (number | null)[][] = [
+  [5, 3, 4, 6, 7, 8, 9, 1, 2],
+  [6, 7, 2, 1, 9, 5, 3, 4, 8],
+  [1, 9, 8, 3, 4, 2, 5, 6, 7],
+  [8, 5, 9, 7, 6, 1, 4, 2, 3],
+  [4, 2, 6, 8, 5, 3, 7, 9, 1],
+  [7, 1, 3, 9, 2, 4, 8, 5, 6],
+  [9, 6, 1, 5, 3, 7, 2, 8, 4],
+  [2, 8, 7, 4, 1, 9, 6, 3, 5],
+  [3, 4, 5, 2, 8, 6, 1, 7, 9]
+]
+
 describe("Sudoku Board Filling The Cells", () => {
   test("Should fill a cell with a value if it's not filled", () => {
     const sudoku = new Sudoku(sudokuArray, size, boxSize);
@@ -26,7 +38,7 @@ describe("Sudoku Board Filling The Cells", () => {
   test("Should not fill the same cell with the same number", () => {
     const sudoku = new Sudoku(sudokuArray, size, boxSize);
     sudoku.fillCell(0,0,5)
-    expect(sudoku.fillCell(0,0,5)).toEqual(false);
+    expect(sudoku.fillCell(0,0,5)).toEqual(null);
   });
 });
 
@@ -132,5 +144,65 @@ describe("Sudoku Board Resetting the board and undo/redos a note", () => {
     sudoku.redo()
     expect(sudoku.board.getCellValue(0,5)).toBe(8);
     expect(sudoku.redo()).toBe(false);
+  });
+});
+
+describe("Sudoku Board Validating moves", () => {
+    test("Should return false for invalid move", () => {
+      const sudoku = new Sudoku(sudokuArray, size, boxSize);
+      expect(sudoku.fillCell(0,2,5)).toEqual(false);
+    });
+
+    test("Should return true for valid move", () => {
+      const sudoku = new Sudoku(sudokuArray, size, boxSize);
+      expect(sudoku.fillCell(0,2,4)).toEqual(true);
+    });
+
+    test("Should return null after adding a note after adding an valid value", () => {
+      const sudoku = new Sudoku(sudokuArray, size, boxSize);
+      expect(sudoku.fillCell(0,2,4)).toEqual(true);
+
+      sudoku.addNote(0,2,5)
+      expect(sudoku.board.getCellNotes(0,2)).toEqual(new Set([5]));
+      expect(sudoku.board.getCellValid(0,2)).toEqual(null);
+    });
+
+    test("Should return null after clearing a cell after adding an valid value", () => {
+      const sudoku = new Sudoku(sudokuArray, size, boxSize);
+      expect(sudoku.fillCell(0,2,4)).toEqual(true);
+      expect(sudoku.clearCell(0,2)).toEqual(true);
+      expect(sudoku.board.getCellValid(0,2)).toEqual(null);
+    });
+
+    test("Should return null after removing a note", () => {
+      const sudoku = new Sudoku(sudokuArray, size, boxSize);
+      expect(sudoku.addNote(0,2,4)).toEqual(true);
+      expect(sudoku.removeNote(0,2,4)).toEqual(true);
+      expect(sudoku.board.getCellValid(0,2)).toEqual(null);
+    });
+
+    test("Should return null to empty space after reset which held a invalid value", () => {
+      const sudoku = new Sudoku(sudokuArray, size, boxSize);
+      expect(sudoku.fillCell(0,2,5)).toEqual(false);
+      sudoku.resetBoard()
+      expect(sudoku.board.getCellValid(0,2)).toEqual(null);
+    });
+});
+
+describe("Sudoku Board Should Validate if the game is complete", () => {
+  test("Should return true if the game is complete", () => {
+    const sudoku = new Sudoku(solutionArray, size, boxSize);
+    expect(sudoku.isComplete()).toEqual(true);
+  });
+
+  test("Should return false due to null value", () => {
+    const sudoku = new Sudoku(sudokuArray, size, boxSize);
+    expect(sudoku.isComplete()).toEqual(false);
+  });
+
+  test("Should return false due to invalid value", () => {
+    const sudoku = new Sudoku(sudokuArray, size, boxSize);
+    expect(sudoku.fillCell(0,2,5)).toEqual(false);
+    expect(sudoku.isComplete()).toEqual(false);
   });
 });
