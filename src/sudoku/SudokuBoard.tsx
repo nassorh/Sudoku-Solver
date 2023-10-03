@@ -1,4 +1,5 @@
 import SudokuCell from './SudokuCell';
+import Memento from './Memento';
 
 export default class SudokuBoard {
   private _board: SudokuCell[][];
@@ -76,5 +77,17 @@ export default class SudokuBoard {
         this._board[row][col].clearNotes()
       }
     }
+  }
+
+  createMemento(): Memento {
+    // Create a memento with the current state of the board
+    return new Memento(this._board.map(row => row.map(cell => cell.value)));
+  }
+
+  restoreFromMemento(memento: Memento): void {
+    // Restore the board state from the memento
+    this._board = memento.getState().map(row =>
+      row.map(value => new SudokuCell(value))
+    );
   }
 }
