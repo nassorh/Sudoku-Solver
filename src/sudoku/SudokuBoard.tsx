@@ -9,7 +9,7 @@ export default class SudokuBoard {
   constructor(initialValues: (number | null)[][],size : number, boxSize : number) {
     this._size = size
     this._boxSize = boxSize
-    this._board = initialValues.map(row => row.map(value => new SudokuCell(value)));
+    this._board = initialValues.map(row => row.map(value => new SudokuCell(value,value !== null)));
   }
 
   //Getter and setters
@@ -26,8 +26,18 @@ export default class SudokuBoard {
     return this._board[row][col].value
   }
 
-  setCellValue(row: number, col: number, value: number | null): void {
+  setCellValue(row: number, col: number, value: number | null): boolean | null{
+    const isValid = this.checkMoveValidity(row,col,value);
     this._board[row][col].value = value;
+    return isValid
+  }
+
+  getCellValid(row: number, col: number): boolean | null {
+    return this._board[row][col].isValid
+  }
+
+  setCellValid(row: number, col: number, isValid: boolean | null): void {
+    this._board[row][col].isValid = isValid;
   }
 
   //Cell Notes
@@ -73,8 +83,7 @@ export default class SudokuBoard {
   reset(initialValues: (number | null)[][]): void {
     for (let row = 0; row < this._size; row++) {
       for (let col = 0; col < this._size; col++) {
-        this._board[row][col].value = initialValues[row][col];
-        this._board[row][col].clearNotes()
+        this._board[row][col] = new SudokuCell(initialValues[row][col],initialValues[row][col] != null);
       }
     }
   }
@@ -89,5 +98,75 @@ export default class SudokuBoard {
     this._board = memento.getState().map(row =>
       row.map(value => new SudokuCell(value))
     );
+  }
+
+  checkMoveValidity(row: number, col: number, value: number | null): boolean | null {
+    if(value === null){
+      this.setCellValid(row,col,null)
+      return null
+    }
+
+    if (this.valueExistsInRow(row, value)) {
+      this.setCellValid(row,col,false)
+      return false
+    }
+
+    if (this.valueExistsInColumn(col, value)) {
+      this.setCellValid(row,col,false)
+      return false
+    }
+  
+    if (this.valueExistsInBox(row, col, value)) {
+      this.setCellValid(row,col,false)
+      return false
+    }
+
+    this.setCellValid(row,col,true)
+    return true
+  }
+  
+  valueExistsInRow(row: number, value: number): boolean {
+    for (let col = 0; col < this._size; col++) {
+      if (this.getCellValue(row, col) === value) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  valueExistsInColumn(col: number, value: number): boolean {
+    for (let row = 0; row < this._size; row++) {
+      if (this.getCellValue(row, col) === value) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  valueExistsInBox(startRow: number, startCol: number, value: number): boolean {
+    const boxSize = this._boxSize;
+    const boxStartRow = Math.floor(startRow / boxSize) * boxSize;
+    const boxStartCol = Math.floor(startCol / boxSize) * boxSize;
+  
+    for (let row = boxStartRow; row < boxStartRow + boxSize; row++) {
+      for (let col = boxStartCol; col < boxStartCol + boxSize; col++) {
+        if (this.getCellValue(row, col) === value) {
+          return true;
+        }
+      }
+    }
+  
+    return false;
+  }
+
+  isComplete() {
+    for (let row = 0; row < this._board.length; row++) {
+      for (let col = 0; col < this._board[row].length; col++) {
+        if (!this.getCellValid(row, col)) {
+          return false;
+        }
+      }
+    }
+    return true
   }
 }
