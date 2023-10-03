@@ -9,7 +9,7 @@ export default class Sudoku {
     constructor(initialValues : (number | null)[][],size : number, boxSize : number){
         this._initialValues = initialValues
         this._board = new SudokuBoard(initialValues,size,boxSize)
-        this.saveState();// Save inital state of board
+        this.saveState();// Save initial state of board
     }
 
     public get board(): SudokuBoard {
@@ -43,18 +43,20 @@ export default class Sudoku {
         return false
     }
 
-    fillCell(row: number, col: number, value: number): boolean {
+    fillCell(row: number, col: number, value: number): boolean | null {
         if (this._board.getCellValue(row,col) === value) {
-            return false
+            return null
         }
-        this._board.setCellValue(row, col, value);
+
+        const isValid = this._board.setCellValue(row, col, value);
         this.saveState();
-        return true 
+        return isValid //null represents empty cell or no changes made
     }
 
     clearCell(row: number, col: number): boolean {
-        if (this._initialValues[row][col] !== null) {
+        if (this._board.getCellValue(row,col) !== null) {
             this._board.setCellValue(row, col, null);
+            this._board.setCellValid(row,col,null)
             this.saveState();
             return true
         }
@@ -64,6 +66,7 @@ export default class Sudoku {
     addNote(row: number, col: number, value: number): boolean {
         if (!this._board.getCellNotes(row,col).has(value)) {
             this._board.addCellNotes(row, col, value);
+            this._board.setCellValid(row,col,null)
             this.saveState();
             return true
         }
