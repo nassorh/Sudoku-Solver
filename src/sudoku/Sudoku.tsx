@@ -6,12 +6,21 @@ export default class Sudoku {
     private _board: SudokuBoard;
     private _careTaker: CareTaker = new CareTaker();
     
-    constructor(initialValues : (number | null)[][],size : number, boxSize : number){
-        this._initialValues = initialValues
-        this._board = new SudokuBoard(initialValues,size,boxSize)
-        this.saveState();// Save initial state of board
+    constructor(input: (number | null)[][] | Sudoku, size: number = 9, boxSize: number = 3) {
+        if (input instanceof Sudoku) {
+            // Copy constructor
+            const sourceSudoku = input as Sudoku;
+            this._initialValues = [...sourceSudoku._initialValues];
+            this._board = SudokuBoard.copyFrom(sourceSudoku._board);
+            this._careTaker = new CareTaker(sourceSudoku._careTaker);
+        } else {
+            // Regular constructor with initial values
+            this._initialValues = input as (number | null)[][];
+            this._board = new SudokuBoard(this._initialValues, size, boxSize);
+            this.saveState(); // Save initial state of board
+        }
     }
-
+        
     public get board(): SudokuBoard {
         return this._board;
     }

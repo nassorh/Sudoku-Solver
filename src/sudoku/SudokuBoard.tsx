@@ -11,6 +11,17 @@ export default class SudokuBoard {
     this._boxSize = boxSize
     this._board = initialValues.map(row => row.map(value => new SudokuCell(value,value !== null)));
   }
+
+  static copyFrom(board: SudokuBoard): SudokuBoard {
+    const copiedBoard = new SudokuBoard([], board.size, board.boxSize);
+
+    // Deep copy of the board cells using SudokuCell.copyFrom
+    copiedBoard._board = board._board.map(row =>
+      row.map(cell => SudokuCell.copyFrom(cell))
+    );
+
+    return copiedBoard;
+  }
   
   //Getter and setters
   public get board(): SudokuCell[][] {

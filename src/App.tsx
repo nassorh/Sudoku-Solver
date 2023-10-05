@@ -1,6 +1,7 @@
 import Sudoku from "./sudoku/Sudoku";
 import SudokuCanvas from "./components/SudokuCanvas";
-import { useState } from 'react';
+import NumberPad from "./components/NumberPad";
+import { useState,useEffect } from 'react';
 
 function App() {
   const [selectedSquare, setSelectedSquare] = useState<{ row: number; col: number } | null>(null);
@@ -20,7 +21,23 @@ function App() {
 
   const handleCellClick = (row: number, col: number) => {
     setSelectedSquare({ row, col });
+  };
+
+  const handleNumberSelect = (number: number) => {
+    if (selectedSquare) {
+      setGame((prevGame) => {
+        if (!prevGame) return null;
+  
+        const updatedBoard = new Sudoku(prevGame)
+        const isValid = updatedBoard.fillCell(selectedSquare.row, selectedSquare.col, number);
+  
+        return updatedBoard;
+      });
+    }
   };  
+  
+  
+
   return (
     <div className="App">
       {
@@ -33,6 +50,7 @@ function App() {
           onCellClick={handleCellClick}
         />
       }
+      <NumberPad onSelectNumber={handleNumberSelect} />
     </div>
   );
 }

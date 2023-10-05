@@ -15,6 +15,20 @@ export default class SudokuCell {
       }
     }
 
+    static copyFrom(cell: SudokuCell): SudokuCell {
+      const copiedCell = new SudokuCell(cell.value, cell.fixedValue);
+  
+      // Copy notes
+      cell.notes.forEach(note => {
+        copiedCell.addNote(note);
+      });
+  
+      // Copy isValid
+      copiedCell.isValid = cell.isValid;
+  
+      return copiedCell;
+    }
+
     //Getter and setters
     public get fixedValue(): boolean {
       return this._fixedValue;
