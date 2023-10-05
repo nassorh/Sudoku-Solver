@@ -1,6 +1,8 @@
 interface NumberPadProps{
     onSelectNumber : Function
+    onClearNumber : Function
 } 
+
 const NumberPad = (props : NumberPadProps) => {
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -13,6 +15,11 @@ const NumberPad = (props : NumberPadProps) => {
             {number}
           </button>
         ))}
+      </div>
+      <div>
+        <button key="clear" onClick={() => props.onClearNumber()}>
+          clear
+        </button>
       </div>
     </div>
   );

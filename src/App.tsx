@@ -35,9 +35,20 @@ function App() {
       });
     }
   };  
-  
-  
 
+  const handleClearSelect = () => {
+    if (selectedSquare) {
+      setGame((prevGame) => {
+        if (!prevGame) return null;
+  
+        const updatedBoard = new Sudoku(prevGame)
+        updatedBoard.clearCell(selectedSquare.row, selectedSquare.col);
+  
+        return updatedBoard;
+      });
+    }
+  };  
+  
   return (
     <div className="App">
       {
@@ -50,7 +61,7 @@ function App() {
           onCellClick={handleCellClick}
         />
       }
-      <NumberPad onSelectNumber={handleNumberSelect} />
+      <NumberPad onSelectNumber={handleNumberSelect} onClearNumber={handleClearSelect}/>
     </div>
   );
 }
