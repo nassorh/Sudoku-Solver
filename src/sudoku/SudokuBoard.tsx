@@ -11,8 +11,12 @@ export default class SudokuBoard {
     this._boxSize = boxSize
     this._board = initialValues.map(row => row.map(value => new SudokuCell(value,value !== null)));
   }
-
+  
   //Getter and setters
+  public get board(): SudokuCell[][] {
+    return this._board;
+  }
+  
   public get size(): number {
     return this._size;
   }
@@ -34,6 +38,10 @@ export default class SudokuBoard {
 
   getCellValid(row: number, col: number): boolean | null {
     return this._board[row][col].isValid
+  }
+
+  getCellFixed(row: number, col: number): boolean | null {
+    return this._board[row][col].fixedValue
   }
 
   setCellValid(row: number, col: number, isValid: boolean | null): void {
