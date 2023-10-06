@@ -4,29 +4,28 @@ export default class SudokuCell {
     private _isValid: boolean | null;
     private readonly _fixedValue: boolean;
 
-    constructor(value: number | null, fixedValue : boolean = false) {
-      this._value = value;
-      this._notes = new Set();
-      this._fixedValue = fixedValue;
-      if(fixedValue){
-        this._isValid = true;
-      }else{
-        this._isValid = null;
-      }
-    }
+    constructor(input: number | null | SudokuCell, fixedValue : boolean = false) {
+      if (input instanceof SudokuCell){
+        this._value = input.value;
 
-    static copyFrom(cell: SudokuCell): SudokuCell {
-      const copiedCell = new SudokuCell(cell.value, cell.fixedValue);
-  
-      // Copy notes
-      cell.notes.forEach(note => {
-        copiedCell.addNote(note);
-      });
-  
-      // Copy isValid
-      copiedCell.isValid = cell.isValid;
-  
-      return copiedCell;
+        //Copy notes
+        this._notes = new Set()
+        input.notes.forEach(note => {
+          this._notes.add(note);
+        });
+
+        this._fixedValue = input.fixedValue;
+        this._isValid = input._isValid;
+      }else{
+        this._value = input;
+        this._notes = new Set();
+        this._fixedValue = fixedValue;
+        if(fixedValue){
+          this._isValid = true;
+        }else{
+          this._isValid = null;
+        }
+      }
     }
 
     //Getter and setters

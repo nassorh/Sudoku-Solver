@@ -6,21 +6,18 @@ export default class SudokuBoard {
   private _size: number;
   private _boxSize : number;
 
-  constructor(initialValues: (number | null)[][],size : number, boxSize : number) {
-    this._size = size
-    this._boxSize = boxSize
-    this._board = initialValues.map(row => row.map(value => new SudokuCell(value,value !== null)));
-  }
-
-  static copyFrom(board: SudokuBoard): SudokuBoard {
-    const copiedBoard = new SudokuBoard([], board.size, board.boxSize);
-
-    // Deep copy of the board cells using SudokuCell.copyFrom
-    copiedBoard._board = board._board.map(row =>
-      row.map(cell => SudokuCell.copyFrom(cell))
-    );
-
-    return copiedBoard;
+  constructor(input : (number | null)[][] | SudokuBoard, size : number = 9, boxSize : number = 3) {
+    if (input instanceof SudokuBoard) {
+      this._size = input.size
+      this._boxSize = input.boxSize
+      this._board = input._board.map(row =>
+        row.map(cell => new SudokuCell (cell))
+      );
+    }else{
+      this._size = size
+      this._boxSize = boxSize
+      this._board = input.map(row => row.map(value => new SudokuCell(value,value !== null)));
+    }
   }
   
   //Getter and setters

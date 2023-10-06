@@ -11,7 +11,7 @@ export default class Sudoku {
             // Copy constructor
             const sourceSudoku = input as Sudoku;
             this._initialValues = [...sourceSudoku._initialValues];
-            this._board = SudokuBoard.copyFrom(sourceSudoku._board);
+            this._board = new SudokuBoard(sourceSudoku._board);
             this._careTaker = new CareTaker(sourceSudoku._careTaker);
         } else {
             // Regular constructor with initial values
