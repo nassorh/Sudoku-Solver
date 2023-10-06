@@ -77,8 +77,8 @@ export default class Sudoku {
 
     addNote(row: number, col: number, value: number): boolean {
         if (!this._board.getCellNotes(row,col).has(value)) {
+            this._board.setCellValid(row,col,null) // Set the cell valid first since updating valid vars on a null cell is not allowed
             this._board.addCellNotes(row, col, value);
-            this._board.setCellValid(row,col,null)
             this.saveState();
             return true
         }
