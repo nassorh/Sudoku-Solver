@@ -42,6 +42,16 @@ describe('SudokuBoard Cell Values', () => {
     sudokuBoard.setCellValue(0, 0, 6)
     expect(sudokuBoard.getCellValue(0,0)).toEqual(5);
   });
+
+  test("when adding a value, should handle out of bounds", () => {
+    const sudoku = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudoku.setCellValue(-1,-1,5)).toEqual(null);
+  });
+
+  test("when getting a value, should handle out-of-bounds", () => {
+    const sudoku = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudoku.getCellValue(-1,-1)).toEqual(null);
+  });
 });
 
 describe('SudokuBoard Cell Notes', () => {
@@ -73,10 +83,47 @@ describe('SudokuBoard Cell Notes', () => {
      expect(sudokuBoard.getCellValue(0, 0)).toBe(5);
   });
 
+  test('when clearing cell notes of a cell with notes, should remove all', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    sudokuBoard.addCellNotes(0,2,1)
+    sudokuBoard.addCellNotes(0,2,2)
+    sudokuBoard.addCellNotes(0,2,3)
+    expect(sudokuBoard.getCellNotes(0, 2)).toEqual(new Set([1,2,3]));
+
+    sudokuBoard.clearCellNote(0,2)
+    expect(sudokuBoard.getCellNotes(0, 2)).toEqual(new Set())
+  });
+
+  test('when clearing cell notes of a cell with no notes, should handle gracefully', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.getCellNotes(0, 2)).toEqual(new Set());
+    expect(sudokuBoard.clearCellNote(0, 2)).toEqual(undefined)
+  });
+
   test('when adding a note to a fixed value, it should not update', () => {
     const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
     sudokuBoard.addCellNotes(0, 0, 6)
     expect(sudokuBoard.getCellNotes(0,0)).toEqual(new Set());
+  });
+
+  test('should handle getting cells notes of an out-of-bound cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.getCellNotes(-1,-1)).toEqual(new Set());
+  });
+
+  test('should handle setting cells notes of an out-of-bound cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.addCellNotes(-1,-1,5)).toEqual(undefined);
+  });
+
+  test('removing a note from an out-of-bound cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+     expect(sudokuBoard.removeCellNote(-1, -1, 5)).toBe(undefined);
+  });
+
+  test('when clearing cell notes of a cell out of bounds, should handle gracefully', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.clearCellNote(-1, -1)).toBe(undefined)
   });
 });
 
@@ -92,6 +139,84 @@ describe('SudokuBoard resetting', () => {
      sudokuBoard.reset(sudokuArray)
      expect(sudokuBoard.getCellValue(0, 3)).toBe(null);
      expect(sudokuBoard.getCellNotes(0, 2)).toEqual(new Set());
+  });
+});
+
+describe('SudokuBoard Get Valid Cells', () => {
+  test('should return true on getting a fixed cell', () => {
+     const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+     expect(sudokuBoard.getCellValid(0,0)).toBe(true);
+  });
+
+  test('should return true on getting a valid cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    sudokuBoard.setCellValue(0,2,4)
+    expect(sudokuBoard.getCellValid(0,2)).toBe(true);
+  });
+
+  test('should return false on getting an invalid cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    sudokuBoard.setCellValue(0,2,5)
+    expect(sudokuBoard.getCellValid(0,2)).toBe(false);
+  });
+
+  test('should handle getting an out-of-bounds cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.getCellValid(-1,-1)).toBe(null);
+  });
+});
+
+describe('SudokuBoard Set Valid Cells', () => {
+  test('should not update a fixed cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.getCellValid(0,0)).toBe(true);
+    sudokuBoard.setCellValid(0,0,false)
+    expect(sudokuBoard.getCellValid(0,0)).toBe(true);
+ });
+
+  test('should not update a null cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.getCellValid(0,2)).toBe(null);
+    sudokuBoard.setCellValid(0,2,true)
+    expect(sudokuBoard.getCellValid(0,2)).toBe(null);
+  });
+
+  test('should update a cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+
+    sudokuBoard.setCellValue(0,2,4)
+    expect(sudokuBoard.getCellValid(0,2)).toBe(true);
+
+    sudokuBoard.setCellValid(0,2,false)
+    expect(sudokuBoard.getCellValid(0,2)).toBe(false);
+  });
+
+  test('should handle out-of-bound test', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.setCellValid(-1,-1,false)).toBe(undefined);
+  });
+});
+
+describe('SudokuBoard Fixed Cells', () => {
+  test('should return true on a fixed cell', () => {
+     const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+     expect(sudokuBoard.getCellFixed(0,0)).toBe(true);
+  });
+
+  test('should return false on null cells that are initialised', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.getCellFixed(0,2)).toBe(false);
+  });
+
+  test('should return false on cells that are not fixed', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    sudokuBoard.setCellValue(0,2,5)
+    expect(sudokuBoard.getCellFixed(0,2)).toBe(false);
+  });
+
+  test('should handle an out-of-bounds cell', () => {
+    const sudokuBoard = new SudokuBoard(sudokuArray, size, boxSize);
+    expect(sudokuBoard.getCellFixed(-1,-1)).toBe(null);
   });
 });
 

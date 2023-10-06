@@ -42,38 +42,58 @@ export default class SudokuBoard {
   }
 
   setCellValue(row: number, col: number, value: number | null): boolean | null{
-    const isValid = this.checkMoveValidity(row,col,value);
-    this._board[row][col].value = value;
-    return isValid
+    if(this.cellExists(row,col)){
+      const isValid = this.checkMoveValidity(row,col,value);
+      this._board[row][col].value = value;
+      return isValid
+    }
+    return null
   }
 
   getCellValid(row: number, col: number): boolean | null {
-    return this._board[row][col].isValid
+    if(this.cellExists(row,col)){
+      return this._board[row][col].isValid
+    }
+    return null
   }
 
   getCellFixed(row: number, col: number): boolean | null {
-    return this._board[row][col].fixedValue
+    if(this.cellExists(row,col)){
+      return this._board[row][col].fixedValue
+    }
+    return null
   }
 
   setCellValid(row: number, col: number, isValid: boolean | null): void {
-    this._board[row][col].isValid = isValid;
+    if(this.cellExists(row,col)){
+      this._board[row][col].isValid = isValid;
+    }    
   }
 
   //Cell Notes
   getCellNotes(row: number, col: number): Set<number> {
-    return this._board[row][col].notes
+    if(this.cellExists(row,col)){
+      return this._board[row][col].notes
+    }
+    return new Set() //TODO : Check if its more memory efficient to refactor to null
   }
   
   addCellNotes(row: number, col: number, note: number): void {
-    this._board[row][col].addNote(note);
+    if(this.cellExists(row,col)){
+      this._board[row][col].addNote(note);
+    }
   }
 
   removeCellNote(row: number, col: number, note: number): void {
-    this._board[row][col].removeNote(note);
+    if(this.cellExists(row,col)){
+      this._board[row][col].removeNote(note);
+    }
   }
 
   clearCellNote(row: number, col: number): void {
-    this._board[row][col].clearNotes();
+    if(this.cellExists(row,col)){
+      this._board[row][col].clearNotes();
+    }
   }
 
   print(): void {
