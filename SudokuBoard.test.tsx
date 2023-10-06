@@ -52,6 +52,17 @@ describe('SudokuBoard Cell Values', () => {
     const sudoku = new SudokuBoard(sudokuArray, size, boxSize);
     expect(sudoku.getCellValue(-1,-1)).toEqual(null);
   });
+
+  test("Should successfully set a value back to null and make isValid null as well", () => {
+    const sudoku = new SudokuBoard(sudokuArray, size, boxSize);
+    sudoku.setCellValue(0,2,4)
+    expect(sudoku.getCellValue(0,2)).toEqual(4);
+    expect(sudoku.getCellValid(0,2)).toEqual(true);
+
+    sudoku.setCellValue(0,2,null)
+    expect(sudoku.getCellValue(0,2)).toEqual(null);
+    expect(sudoku.getCellValid(0,2)).toEqual(null);
+  });
 });
 
 describe('SudokuBoard Cell Notes', () => {

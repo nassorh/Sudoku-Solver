@@ -38,7 +38,9 @@ export default class SudokuCell {
     }
     
     public set isValid(value: boolean | null) {
-      this._isValid = value;
+      if(!this._fixedValue && this._value !== null){
+        this._isValid = value;
+      }
     }
 
     public get notes(): Set<number> {
@@ -50,7 +52,10 @@ export default class SudokuCell {
     }
   
     public set value(value: number | null) {
-      if (value && this.isValidValue(value) && !this._fixedValue) {
+      if(value == null){
+        this._value = value;
+        this._notes?.clear();
+      }else if (this.isValidValue(value) && !this._fixedValue) {
         this._value = value;
         this._notes?.clear();
       }

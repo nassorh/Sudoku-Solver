@@ -45,6 +45,7 @@ export default class SudokuBoard {
     if(this.cellExists(row,col)){
       const isValid = this.checkMoveValidity(row,col,value);
       this._board[row][col].value = value;
+      this._board[row][col].isValid = isValid;
       return isValid
     }
     return null
