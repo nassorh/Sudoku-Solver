@@ -7,7 +7,7 @@ export default class CareTaker {
   constructor(careTaker?: CareTaker) {
     if (careTaker) {
       // Copy constructor logic
-      this._mementos = [...careTaker._mementos];
+      this._mementos = careTaker._mementos.map(memento => new Memento(memento.getState()));
       this._currentIndex = careTaker._currentIndex;
     }
   }
