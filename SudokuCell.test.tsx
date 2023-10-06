@@ -89,3 +89,38 @@ describe("Test add value", () => {
   });
 });
 
+describe("Test remove note", () => {
+  test("Should successfully remove", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    originalSudokuCell.addNote(5)
+    originalSudokuCell.removeNote(5)
+    expect(originalSudokuCell.notes).toEqual(new Set());
+  });
+
+  test("Should handle being passed a note that does not exist", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    originalSudokuCell.addNote(5)
+    originalSudokuCell.removeNote(7)
+    expect(originalSudokuCell.notes).toEqual(new Set([5]));
+  });
+});
+
+describe("Test clear note", () => {
+  test("Should successfully remove a note", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    originalSudokuCell.addNote(5)
+    originalSudokuCell.clearNotes()
+    expect(originalSudokuCell.notes).toEqual(new Set());
+  });
+
+  test("Should successfully remove all notes", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    originalSudokuCell.addNote(5)
+    originalSudokuCell.addNote(6)
+    originalSudokuCell.addNote(7)
+    expect(originalSudokuCell.notes).toEqual(new Set([5,6,7]));
+
+    originalSudokuCell.clearNotes()
+    expect(originalSudokuCell.notes).toEqual(new Set());
+  });
+});
