@@ -50,20 +50,20 @@ export default class SudokuCell {
     }
   
     public set value(value: number | null) {
-      if (!this._fixedValue) {
+      if (value && this.isValidValue(value) && !this._fixedValue) {
         this._value = value;
         this._notes?.clear();
       }
     }
 
     addNote(note: number): void {
-      if (this.isValidNoteValue(note) && !this._fixedValue) {
+      if (this.isValidValue(note) && !this._fixedValue) {
         this._notes.add(note);
         this._value = null;
       }
     }
 
-    private isValidNoteValue(note: number): boolean {
+    private isValidValue(note: number): boolean {
       return note >= 1 && note <= 9;
     }
 

@@ -48,3 +48,44 @@ describe("Test add notes", () => {
 });
 
 
+describe("Test add value", () => {
+  test("Should successfully add a value on init", () => {
+    const originalSudokuCell = new SudokuCell(5);
+    expect(originalSudokuCell.value).toEqual(5);
+  });
+
+  test("Should successfully add a value", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    originalSudokuCell.value = 5
+    expect(originalSudokuCell.value).toEqual(5);
+  });
+
+  test("Should not add a value with a number greater than 9 on init", () => {
+    const originalSudokuCell = new SudokuCell(10);
+    expect(originalSudokuCell.value).toEqual(null);
+  });
+
+  test("Should not add a value with a number greater than 9", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    originalSudokuCell.value = 10
+    expect(originalSudokuCell.value).toEqual(null);
+  });
+
+  test("Should not add a value with a number smaller than 1 on init", () => {
+    const originalSudokuCell = new SudokuCell(-1);
+    expect(originalSudokuCell.value).toEqual(null);
+  });
+
+  test("Should not add a value with a number smaller than 1", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    originalSudokuCell.value = -1
+    expect(originalSudokuCell.value).toEqual(null);
+  });
+
+  test("Should not add a value to a fixed value", () => {
+    const originalSudokuCell = new SudokuCell(6,true);
+    originalSudokuCell.value = 7
+    expect(originalSudokuCell.value).toEqual(6);
+  });
+});
+
