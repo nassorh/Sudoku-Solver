@@ -67,7 +67,7 @@ export default class Sudoku {
             this._board.setCellValue(row, col, null);
             this.saveState();
             return true
-        }else if(this._board.getCellNotes(row,col) !== null){
+        }else if(this._board.getCellNotes(row,col).size !== 0){
             this._board.clearCellNote(row,col)
             this.saveState();
             return true
