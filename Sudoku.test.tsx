@@ -47,9 +47,20 @@ describe("Sudoku Board Clearing The Cells", () => {
     expect(sudoku.clearCell(0,0)).toEqual(true);
   });
 
+  test("Should clear a cell if it contain notes filled", () => {
+    const sudoku = new Sudoku(sudokuArray, size, boxSize);
+    sudoku.addNote(0,2,5)
+    expect(sudoku.clearCell(0,2)).toEqual(true);
+  });
+
   test("Should not clear a cell if it's empty", () => {
     const sudoku = new Sudoku(sudokuArray, size, boxSize);
     expect(sudoku.clearCell(0,3)).toEqual(false);
+  });
+
+  test("Should handle out of index cells", () => {
+    const sudoku = new Sudoku(sudokuArray, size, boxSize);
+    expect(sudoku.clearCell(-1,-1)).toEqual(false);
   });
 });
 
@@ -219,4 +230,3 @@ describe("Test copy constructor", () => {
     expect(copiedSudoku.board).toEqual(originalSudoku.board); //Compares values not object address
   });
 });
-

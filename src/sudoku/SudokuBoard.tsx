@@ -35,7 +35,10 @@ export default class SudokuBoard {
 
   //Cell Values
   getCellValue(row: number, col: number): number | null {
-    return this._board[row][col].value
+    if(this.cellExists(row,col)){
+      return this._board[row][col].value
+    }
+    return null
   }
 
   setCellValue(row: number, col: number, value: number | null): boolean | null{
@@ -184,5 +187,10 @@ export default class SudokuBoard {
       }
     }
     return true
+  }
+
+  cellExists(row:number,col:number) : boolean{
+    return row >= 0 && row < this._board.length 
+    && col >= 0 && col < this._board[row].length;
   }
 }
