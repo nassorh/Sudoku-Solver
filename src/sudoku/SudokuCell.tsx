@@ -1,5 +1,5 @@
 export default class SudokuCell {
-    private _value: number | null;
+    private _value: number | null = null;
     private _notes: Set<number>;
     private _isValid: boolean | null;
     private readonly _fixedValue: boolean;
@@ -11,13 +11,13 @@ export default class SudokuCell {
         //Copy notes
         this._notes = new Set()
         input.notes.forEach(note => {
-          this._notes.add(note);
+          this.addNote(note);
         });
 
         this._fixedValue = input.fixedValue;
         this._isValid = input._isValid;
       }else{
-        this._value = input;
+        this.value = input
         this._notes = new Set();
         this._fixedValue = fixedValue;
         if(fixedValue){
@@ -52,7 +52,7 @@ export default class SudokuCell {
     public set value(value: number | null) {
       if (!this._fixedValue) {
         this._value = value;
-        this._notes.clear();
+        this._notes?.clear();
       }
     }
 

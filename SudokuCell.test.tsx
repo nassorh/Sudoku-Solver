@@ -13,4 +13,38 @@ describe("Test copy constructor", () => {
   });
 });
 
+describe("Test add notes", () => {
+  test("Should successfully add a note", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    expect(originalSudokuCell.value).toEqual(null);
+
+    originalSudokuCell.addNote(5)
+    expect(originalSudokuCell.notes).toEqual(new Set([5]));
+  });
+
+  test("Should not add a note with a number greater than 9", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    expect(originalSudokuCell.value).toEqual(null);
+
+    originalSudokuCell.addNote(10)
+    expect(originalSudokuCell.notes).toEqual(new Set());
+  });
+
+  test("Should not add a note with a number smaller than 1", () => {
+    const originalSudokuCell = new SudokuCell(null);
+    expect(originalSudokuCell.value).toEqual(null);
+
+    originalSudokuCell.addNote(-1)
+    expect(originalSudokuCell.notes).toEqual(new Set());
+  });
+
+  test("Should not add a note to a fixed value", () => {
+    const originalSudokuCell = new SudokuCell(6,true);
+    expect(originalSudokuCell.fixedValue).toEqual(true);
+
+    originalSudokuCell.addNote(7)
+    expect(originalSudokuCell.notes).toEqual(new Set());
+  });
+});
+
 
