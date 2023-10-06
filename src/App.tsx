@@ -1,10 +1,13 @@
 import Sudoku from "./sudoku/Sudoku";
 import SudokuCanvas from "./components/SudokuCanvas";
 import NumberPad from "./components/NumberPad";
+import GameControls from './components/GameControls'
 import { useState,useEffect } from 'react';
 
 function App() {
   const [selectedSquare, setSelectedSquare] = useState<{ row: number; col: number } | null>(null);
+  const [isNotes, setisNotes] = useState<boolean>(false);
+
   const [game, setGame] = useState<Sudoku | null>(new Sudoku(
     [
       [5, 3, null, null, 7, null, null, null, null],
@@ -23,14 +26,30 @@ function App() {
     setSelectedSquare({ row, col });
   };
 
+  const toggleNotes = () => {
+    setisNotes(prevState => !prevState);
+  };
+
   const handleNumberSelect = (number: number) => {
     if (selectedSquare) {
+      const cellValue = game?.board.getCellValue(selectedSquare.row, selectedSquare.col)
+      const cellNote = game?.board.getCellNotes(selectedSquare.row, selectedSquare.col)
       setGame((prevGame) => {
         if (!prevGame) return null;
-  
-        const updatedBoard = new Sudoku(prevGame)
-        const isValid = updatedBoard.fillCell(selectedSquare.row, selectedSquare.col, number);
-  
+        
+        let updatedBoard;
+        if(isNotes){
+          updatedBoard = new Sudoku(prevGame)
+          cellNote?.has(number) ?
+          updatedBoard.removeNote(selectedSquare.row, selectedSquare.col,number)
+          :updatedBoard.addNote(selectedSquare.row, selectedSquare.col, number);
+        }else{
+          updatedBoard = new Sudoku(prevGame)
+          cellValue === number?
+          updatedBoard.clearCell(selectedSquare.row, selectedSquare.col)
+          :updatedBoard.fillCell(selectedSquare.row, selectedSquare.col, number)
+        }
+        
         return updatedBoard;
       });
     }
@@ -61,7 +80,8 @@ function App() {
           onCellClick={handleCellClick}
         />
       }
-      <NumberPad onSelectNumber={handleNumberSelect} onClearNumber={handleClearSelect}/>
+      <NumberPad onSelectNumber={handleNumberSelect} />
+      <GameControls onClearNumber={handleClearSelect} onClickNotes={toggleNotes} clickStatus={isNotes}/>
     </div>
   );
 }

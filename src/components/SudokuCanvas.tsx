@@ -66,8 +66,14 @@ const SudokuCanvas = (props : SudokuCanvasProps) => {
 
       for (let row = 0; row < size; row++) {
         for (let col = 0; col < size; col++) {
-          const cellValue = board.getCellValue(row, col);
-
+          let cellValue = board.getCellValue(row, col)?.toString();
+          
+          //If its null check to see if any notes
+          if(!cellValue){
+            let cellNotes = board.getCellNotes(row,col)
+            cellValue = Array.from(cellNotes).join(', ');
+          }
+          
           if (cellValue !== null) {
             drawCellText(context, cellValue, row, col, size, boxSize, board);
           }
@@ -77,7 +83,7 @@ const SudokuCanvas = (props : SudokuCanvasProps) => {
 
     const drawCellText = (
       context: CanvasRenderingContext2D,
-      cellValue: number,
+      cellValue: string,
       row: number,
       col: number,
       size: number,
