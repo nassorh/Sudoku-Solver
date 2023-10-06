@@ -1,4 +1,3 @@
-// SudokuBoard.test.tsx
 import Sudoku from './src/sudoku/Sudoku'
 
 //Test Board
@@ -206,3 +205,18 @@ describe("Sudoku Board Should Validate if the game is complete", () => {
     expect(sudoku.isComplete()).toEqual(false);
   });
 });
+
+describe("Test copy constructor", () => {
+  test("Copy constructor should create an identical Sudoku instance", () => {
+    const originalSudoku = new Sudoku(sudokuArray);
+    const differentSudoku = new Sudoku(solutionArray);
+
+    const copiedSudoku = new Sudoku(originalSudoku);
+
+    //Reset to ensure that both have the same initial value 
+    originalSudoku.resetBoard()
+    copiedSudoku.resetBoard()
+    expect(copiedSudoku.board).toEqual(originalSudoku.board); //Compares values not object address
+  });
+});
+

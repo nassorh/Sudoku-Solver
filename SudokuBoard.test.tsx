@@ -1,4 +1,3 @@
-// SudokuBoard.test.tsx
 import SudokuBoard from './src/sudoku/SudokuBoard';
 
 //Test Board
@@ -93,5 +92,18 @@ describe('SudokuBoard resetting', () => {
      sudokuBoard.reset(sudokuArray)
      expect(sudokuBoard.getCellValue(0, 3)).toBe(null);
      expect(sudokuBoard.getCellNotes(0, 2)).toEqual(new Set());
+  });
+});
+
+describe("Test copy constructor", () => {
+  test("Copy constructor should create an identical Sudoku Board instance", () => {
+    const originalSudokuBoard = new SudokuBoard(sudokuArray);
+
+    const copiedSudokuBoard = new SudokuBoard(originalSudokuBoard);
+
+    //Reset to ensure that both have the same initial value 
+    expect(copiedSudokuBoard.board).toEqual(copiedSudokuBoard.board); //Compares values not object address
+    expect(copiedSudokuBoard.size).toEqual(copiedSudokuBoard.size);
+    expect(copiedSudokuBoard.boxSize).toEqual(copiedSudokuBoard.boxSize);
   });
 });
