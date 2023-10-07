@@ -130,14 +130,25 @@ export default class SudokuBoard {
 
   createMemento(): Memento {
     // Create a memento with the current state of the board
-    return new Memento(this._board.map(row => row.map(cell => cell.value)));
+    const boardState = this._board.map(row => row.map(cell => new SudokuCell(cell)));
+    return new Memento(boardState);
   }
 
   restoreFromMemento(memento: Memento): void {
-    // Restore the board state from the memento
-    this._board = memento.getState().map(row =>
-      row.map(value => new SudokuCell(value))
-    );
+     // Clear the current board
+    this._board = [];
+
+    for (const row of memento.getState()) {
+        // Create a row for the board
+        const boardRow: SudokuCell[] = [];
+        
+        for (const cellData of row) {
+            boardRow.push(cellData);
+        }
+
+        // Add the row to the board
+        this._board.push(boardRow);
+    }
   }
 
   checkMoveValidity(row: number, col: number, value: number | null): boolean | null {

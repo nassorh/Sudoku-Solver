@@ -7,7 +7,6 @@ import { useState,useEffect } from 'react';
 function App() {
   const [selectedSquare, setSelectedSquare] = useState<{ row: number; col: number } | null>(null);
   const [isNotes, setisNotes] = useState<boolean>(false);
-
   const [game, setGame] = useState<Sudoku | null>(new Sudoku(
     [
       [5, 3, null, null, 7, null, null, null, null],
@@ -22,14 +21,12 @@ function App() {
     ]
   ))
 
+  //SudokuCanvas
   const handleCellClick = (row: number, col: number) => {
     setSelectedSquare({ row, col });
   };
 
-  const toggleNotes = () => {
-    setisNotes(prevState => !prevState);
-  };
-
+  //NumberPad
   const handleNumberSelect = (number: number) => {
     if (selectedSquare) {
       const cellValue = game?.board.getCellValue(selectedSquare.row, selectedSquare.col)
@@ -55,6 +52,7 @@ function App() {
     }
   };  
 
+  //GameControls
   const handleClearSelect = () => {
     if (selectedSquare) {
       setGame((prevGame) => {
@@ -62,6 +60,36 @@ function App() {
   
         const updatedBoard = new Sudoku(prevGame)
         updatedBoard.clearCell(selectedSquare.row, selectedSquare.col);
+  
+        return updatedBoard;
+      });
+    }
+  };  
+
+  const toggleNotes = () => {
+    setisNotes(prevState => !prevState);
+  };
+
+  const handleClickUndo = () => {
+    if (selectedSquare) {
+      setGame((prevGame) => {
+        if (!prevGame) return null;
+  
+        const updatedBoard = new Sudoku(prevGame)
+        updatedBoard.undo()
+  
+        return updatedBoard;
+      });
+    }
+  };  
+
+  const handleClickRedo = () => {
+    if (selectedSquare) {
+      setGame((prevGame) => {
+        if (!prevGame) return null;
+  
+        const updatedBoard = new Sudoku(prevGame)
+        updatedBoard.redo()
   
         return updatedBoard;
       });
@@ -81,7 +109,7 @@ function App() {
         />
       }
       <NumberPad onSelectNumber={handleNumberSelect} />
-      <GameControls onClearNumber={handleClearSelect} onClickNotes={toggleNotes} clickStatus={isNotes}/>
+      <GameControls onClearNumber={handleClearSelect} onClickNotes={toggleNotes} clickStatus={isNotes} onClickUndo={handleClickUndo} onClickRedo={handleClickRedo}/>
     </div>
   );
 }

@@ -1,12 +1,12 @@
+import SudokuCell from './SudokuCell';
 export default class Memento {
-    private _state: (number | null)[][];
+    private _state: SudokuCell[][];
   
-    constructor(state: (number | null)[][]) {
-      this._state = state.map(row => [...row]);
+    constructor(state: SudokuCell[][]) {
+      this._state = state.map(row => row.map(cell => new SudokuCell(cell)));
     }
   
-    getState(): (number | null)[][] {
+    getState(): SudokuCell[][] {
       return this._state;
     }
-  }
-  
+}

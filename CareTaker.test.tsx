@@ -1,12 +1,14 @@
 import CareTaker from './src/sudoku/CareTaker'
 import Memento from './src/sudoku/Memento';
-
+import SudokuCell from './src/sudoku/SudokuCell';
 //Test Mementos
+
 const memento1 = new Memento([
-    [2,3,4]
+    [new SudokuCell(2),new SudokuCell(3),new SudokuCell(4)]
 ]);
+
 const memento2 = new Memento([
-    [5,6,4]
+  [new SudokuCell(5),new SudokuCell(6),new SudokuCell(3)]
 ]);
 
 describe("Test copy constructor", () => {

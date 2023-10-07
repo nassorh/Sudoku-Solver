@@ -116,6 +116,11 @@ describe("Sudoku Board Resetting the board and undo/redos a note", () => {
 
     sudoku.undo()
     expect(sudoku.board.getCellNotes(0,2)).toEqual(new Set());
+    //check status of other number for side effects
+    expect(sudoku.board.getCellValue(0,0)).toEqual(5); 
+    expect(sudoku.board.getCellValid(0,0)).toEqual(true); 
+    expect(sudoku.board.getCellFixed(0,0)).toEqual(true); 
+    expect(sudoku.board.getCellNotes(0,0)).toEqual(new Set()); 
 
     sudoku.undo()
     expect(sudoku.board.getCellValue(0,5)).toBe(null);
