@@ -95,6 +95,17 @@ function App() {
       });
     }
   };  
+
+  const handleClickNewGame = () => {
+    setGame((prevGame) => {
+      if (!prevGame) return null;
+
+      const updatedBoard = new Sudoku(prevGame)
+      updatedBoard.resetBoard()
+
+      return updatedBoard;
+    });
+  }; 
   
   return (
     <div className="App">
@@ -109,7 +120,7 @@ function App() {
         />
       }
       <NumberPad onSelectNumber={handleNumberSelect} />
-      <GameControls onClearNumber={handleClearSelect} onClickNotes={toggleNotes} clickStatus={isNotes} onClickUndo={handleClickUndo} onClickRedo={handleClickRedo}/>
+      <GameControls onClearNumber={handleClearSelect} onClickNotes={toggleNotes} clickStatus={isNotes} onClickUndo={handleClickUndo} onClickRedo={handleClickRedo} onClickNewGame={handleClickNewGame}/>
     </div>
   );
 }
