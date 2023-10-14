@@ -1,21 +1,24 @@
 interface NumberPadProps{
-    onSelectNumber : Function
+    onSelectNumber : (number: number) => void;
+    onClickNewGame : () => void;
 } 
 
 const NumberPad = (props : NumberPadProps) => {
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   return (
-    <div>
-      <p>Select a number:</p>
-      <div style={{ display: 'flex' }}>
+    <>
+      <div className="number-pad">
         {numbers.map(number => (
-          <button key={number} onClick={() => props.onSelectNumber(number)}>
+          <button className="number-button" key={number} onClick={() => props.onSelectNumber(number)}>
             {number}
           </button>
         ))}
       </div>
-    </div>
+      <button className="number-pad-new" key="new" onClick={() => props.onClickNewGame()}>
+        New Game
+      </button>
+    </>
   );
 };
 
