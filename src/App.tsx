@@ -1,8 +1,8 @@
 import Sudoku from "./sudoku/Sudoku";
-import SudokuCanvas from "./components/SudokuCanvas";
 import NumberPad from "./components/NumberPad";
 import GameControls from './components/GameControls'
-import { useState,useEffect } from 'react';
+import { useState } from 'react';
+import SudokuBoard from "./components/SudokuBoard";
 
 function App() {
   const [selectedSquare, setSelectedSquare] = useState<{ row: number; col: number } | null>(null);
@@ -111,16 +111,14 @@ function App() {
     <div className="App">
       {
         game &&
-        <SudokuCanvas 
-          board = {game.board} 
-          size={9} 
-          boxSize={3}
-          selectedSquare={selectedSquare}
-          onCellClick={handleCellClick}
+        <SudokuBoard 
+          size={9} boxSize={3} board={game.board} selectedSquare={selectedSquare} onCellClick={handleCellClick}
         />
       }
-      <NumberPad onSelectNumber={handleNumberSelect} />
-      <GameControls onClearNumber={handleClearSelect} onClickNotes={toggleNotes} clickStatus={isNotes} onClickUndo={handleClickUndo} onClickRedo={handleClickRedo} onClickNewGame={handleClickNewGame}/>
+      <div className="controls">
+        <GameControls onClearNumber={handleClearSelect} onClickNotes={toggleNotes} clickStatus={isNotes} onClickUndo={handleClickUndo} onClickRedo={handleClickRedo}/>
+        <NumberPad onSelectNumber={handleNumberSelect} onClickNewGame={handleClickNewGame}/>
+      </div>
     </div>
   );
 }
