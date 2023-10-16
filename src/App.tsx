@@ -3,6 +3,7 @@ import NumberPad from "./components/NumberPad";
 import GameControls from './components/GameControls'
 import { useState } from 'react';
 import SudokuBoard from "./components/SudokuBoard";
+import SudokuSolver from "./sudoku/SudokuSolver";
 
 function App() {
   const [selectedSquare, setSelectedSquare] = useState<{ row: number; col: number } | null>(null);
@@ -106,6 +107,19 @@ function App() {
       return updatedBoard;
     });
   }; 
+
+  const handleSolveGame = () => {
+    setGame((prevGame) => {
+      if (!prevGame) return null;
+
+      //Solve board
+      const solver = new SudokuSolver(prevGame)
+      solver.solve()
+
+      const updatedBoard = new Sudoku(solver.sudoku)
+      return updatedBoard;
+    })
+  }
   
   const gameComplete = game?.isComplete()
   return (
@@ -130,6 +144,7 @@ function App() {
             <NumberPad 
               onSelectNumber={handleNumberSelect} 
               onClickNewGame={handleClickNewGame}
+              onClickSolveGame={handleSolveGame}
               isGameComplete={gameComplete}
             />
           </div>

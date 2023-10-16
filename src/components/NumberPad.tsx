@@ -1,6 +1,7 @@
 interface NumberPadProps{
     onSelectNumber : (number: number) => void;
     onClickNewGame : () => void;
+    onClickSolveGame : () => void;
     isGameComplete : boolean | undefined;
 } 
 
@@ -18,9 +19,14 @@ const NumberPad = (props : NumberPadProps) => {
         ))}
       </div>
     }
-      <button className="number-pad-new" key="new" onClick={() => props.onClickNewGame()}>
-        New Game
-      </button>
+      <div className="number-pad-button-wrapper">
+        <button className="number-pad-button" key="solve" onClick={() => props.onClickSolveGame()}>
+          Solve Game
+        </button>
+        <button className="number-pad-button" key="new" onClick={() => props.onClickNewGame()}>
+          New Game
+        </button>
+      </div>
     </>
   );
 };
