@@ -1,4 +1,4 @@
-import SudokuBoard from './src/sudoku/SudokuBoard';
+import Sudoku from './src/sudoku/Sudoku';
 import SudokuSolver from './src/sudoku/SudokuSolver';
 
 describe('SudokuSolver', () => {
@@ -27,16 +27,22 @@ describe('SudokuSolver', () => {
       [3, 4, 5, 2, 8, 6, 1, 7, 9],
     ];
 
-    const board = new SudokuBoard(puzzle);
-    const solver = new SudokuSolver(board);
+    const sudoku = new Sudoku(puzzle);
+    const solver = new SudokuSolver(sudoku);
 
     // Act
     const isSolved = solver.solve();
 
     // Assert
     expect(isSolved).toBe(true);
-    expect(board.board.map(row => row.map(cell => cell.value))).toEqual(
-        solution.map(row => row.map(value => value))
-      );      
+
+    const solvedBoardValues = sudoku.board.board.map(row => row.map(cell => cell.value));
+    const expectedBoardValues = solution.map(row => row.map(value => value));
+
+    for (let row = 0; row < sudoku.board.size; row++) {
+      for (let col = 0; col < sudoku.board.size; col++) {
+        expect(solvedBoardValues[row][col]).toEqual(expectedBoardValues[row][col]);
+      }
+    }
   });
 });

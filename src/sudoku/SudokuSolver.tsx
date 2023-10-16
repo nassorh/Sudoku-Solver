@@ -1,14 +1,14 @@
-import SudokuBoard from './SudokuBoard';
+import Sudoku from './Sudoku';
 
 class SudokuSolver {
-  private _board: SudokuBoard;
+  private _sudoku: Sudoku;
 
-  constructor(board: SudokuBoard) {
-    this._board = board;
+  constructor(sudoku: Sudoku) {
+    this._sudoku = sudoku;
   }
 
-  public get board(): SudokuBoard {
-    return this._board;
+  public get sudoku(): Sudoku {
+    return this._sudoku;
   }
 
   solve(): boolean {
@@ -20,25 +20,25 @@ class SudokuSolver {
 
     const { row, col } = emptyCell;
 
-    for (let num = 1; num <= this._board.size; num++) {
-      if (this._board.checkMoveValidity(row, col, num)) {
-        this._board.setCellValue(row, col, num);
+    for (let num = 1; num <= this._sudoku.board.size; num++) {
+      if (this._sudoku.board.checkMoveValidity(row, col, num)) {
+        this._sudoku.board.setCellValue(row, col, num);
 
         if (this.solve()) {
           return true;
         }
 
-        this._board.setCellValue(row, col, null);
+        this._sudoku.board.setCellValue(row, col, null);
       }
     }
-    
+
     return false;
   }
 
   private findEmptyCell(): { row: number; col: number } | null {
-    for (let row = 0; row < this._board.size; row++) {
-      for (let col = 0; col < this._board.size; col++) {
-        if (this._board.getCellValue(row, col) === null) {
+    for (let row = 0; row < this._sudoku.board.size; row++) {
+      for (let col = 0; col < this._sudoku.board.size; col++) {
+        if (this._sudoku.board.getCellValue(row, col) === null) {
           return { row, col };
         }
       }
