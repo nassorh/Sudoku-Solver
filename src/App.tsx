@@ -107,18 +107,34 @@ function App() {
     });
   }; 
   
+  const gameComplete = game?.isComplete()
   return (
     <div className="App">
-      {
-        game &&
-        <SudokuBoard 
-          size={9} boxSize={3} board={game.board} selectedSquare={selectedSquare} onCellClick={handleCellClick}
-        />
-      }
-      <div className="controls">
-        <GameControls onClearNumber={handleClearSelect} onClickNotes={toggleNotes} clickStatus={isNotes} onClickUndo={handleClickUndo} onClickRedo={handleClickRedo}/>
-        <NumberPad onSelectNumber={handleNumberSelect} onClickNewGame={handleClickNewGame}/>
-      </div>
+      {game && (
+        <>
+          <SudokuBoard
+            size={9}
+            boxSize={3}
+            board={game.board}
+            selectedSquare={selectedSquare}
+            onCellClick={handleCellClick}
+          />
+          <div className="controls">
+            <GameControls 
+              onClearNumber={handleClearSelect} 
+              onClickNotes={toggleNotes} 
+              clickStatus={isNotes} onClickUndo={handleClickUndo} 
+              onClickRedo={handleClickRedo} 
+              isGameComplete={gameComplete}
+            />
+            <NumberPad 
+              onSelectNumber={handleNumberSelect} 
+              onClickNewGame={handleClickNewGame}
+              isGameComplete={gameComplete}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }
