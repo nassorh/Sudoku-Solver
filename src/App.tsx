@@ -1,9 +1,10 @@
 import Sudoku from "./sudoku/Sudoku";
 import NumberPad from "./components/NumberPad";
 import GameControls from './components/GameControls'
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import SudokuBoard from "./components/SudokuBoard";
 import SudokuSolver from "./sudoku/SudokuSolver";
+import { getRandomSudoku } from './utils';
 
 function App() {
   const [selectedSquare, setSelectedSquare] = useState<{ row: number; col: number } | null>(null);
@@ -21,6 +22,11 @@ function App() {
       [null, null, null, null, 8, null, null, 7, 9]
     ]
   ))
+
+  useEffect(() => {
+    const randomPuzzle = getRandomSudoku(); // You need to implement this function
+    setGame(new Sudoku(randomPuzzle));
+  },[])
 
   //SudokuCanvas
   const handleCellClick = (row: number, col: number) => {
