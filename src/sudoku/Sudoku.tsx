@@ -63,14 +63,16 @@ export default class Sudoku {
     }
 
     clearCell(row: number, col: number): boolean {
-        if (this._board.getCellValue(row,col) !== null) {
-            this._board.setCellValue(row, col, null);
-            this.saveState();
-            return true
-        }else if(this._board.getCellNotes(row,col).size !== 0){
-            this._board.clearCellNote(row,col)
-            this.saveState();
-            return true
+        if(!this._board.getCellFixed(row,col)){
+            if (this._board.getCellValue(row,col) !== null) {
+                this._board.setCellValue(row, col, null);
+                this.saveState();
+                return true
+            }else if(this._board.getCellNotes(row,col).size !== 0){
+                this._board.clearCellNote(row,col)
+                this.saveState();
+                return true
+            }
         }
         return false
     }

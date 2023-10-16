@@ -44,7 +44,8 @@ describe("Sudoku Board Filling The Cells", () => {
 describe("Sudoku Board Clearing The Cells", () => {
   test("Should clear a cell if it's filled", () => {
     const sudoku = new Sudoku(sudokuArray, size, boxSize);
-    expect(sudoku.clearCell(0,0)).toEqual(true);
+    sudoku.fillCell(0,3,5)
+    expect(sudoku.clearCell(0,3)).toEqual(true);
   });
 
   test("Should clear a cell if it contain notes filled", () => {
@@ -56,6 +57,12 @@ describe("Sudoku Board Clearing The Cells", () => {
   test("Should not clear a cell if it's empty", () => {
     const sudoku = new Sudoku(sudokuArray, size, boxSize);
     expect(sudoku.clearCell(0,3)).toEqual(false);
+  });
+
+  test("Should not clear a cell if it's a fixed value", () => {
+    const sudoku = new Sudoku(sudokuArray, size, boxSize);
+    expect(sudoku.board.getCellFixed(0,0)).toEqual(true);
+    expect(sudoku.clearCell(0,0)).toEqual(false);
   });
 
   test("Should handle out of index cells", () => {
